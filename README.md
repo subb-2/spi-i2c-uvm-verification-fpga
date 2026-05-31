@@ -67,6 +67,8 @@ IDLE ──(sda_fall & scl=1)──► ADDR ──(주소 일치)──► DATA_
 
 ### SPI Master / Slave Block Diagram
 
+<img width="1101" height="603" alt="Image" src="https://github.com/user-attachments/assets/190ee3a4-911c-4df3-aa48-7578595ffe01" />
+
 ```
   ┌──────────────────┐   SCLK   ┌──────────────────┐
   │   SPI Master     │─────────►│   SPI Slave      │
