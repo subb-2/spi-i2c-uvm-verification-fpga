@@ -148,7 +148,7 @@ SPI / I2C 통신 프로토콜을 직접 분석하고, SystemVerilog로 Master / 
 
 </td>
 
-<td width="6%">
+<td width="30%">
 </td>
 
 <td width="50%">
