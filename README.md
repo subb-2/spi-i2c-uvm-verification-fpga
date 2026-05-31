@@ -65,34 +65,30 @@ IDLE ──(sda_fall & scl=1)──► ADDR ──(주소 일치)──► DATA_
 
 ## 🏗️ 시스템 구조
 
+<table>
+<tr>
+
+<td width="49%">
+
 ### SPI Master / Slave Block Diagram
 
 <img width="1101" height="603" alt="Image" src="https://github.com/user-attachments/assets/190ee3a4-911c-4df3-aa48-7578595ffe01" />
 
-```
-  ┌──────────────────┐   SCLK   ┌──────────────────┐
-  │   SPI Master     │─────────►│   SPI Slave      │
-  │                  │   MOSI   │                  │
-  │  clk_div ──► FSM │─────────►│ FSM ──► rx_data  │
-  │  tx_data         │   MISO   │     ◄── tx_data  │
-  │  start           │◄─────────│                  │
-  │  ◄── done/busy   │    CS    │ ◄── cs_n         │
-  └──────────────────┘─────────►└──────────────────┘
-```
+</td>
+
+<td width="2%">
+</td>
+
+<td width="49%">
 
 ### I2C Master / Slave Block Diagram
 
-```
-  ┌──────────────────┐          ┌──────────────────┐
-  │   I2C Master     │   SCL    │   I2C Slave      │
-  │                  │─────────►│                  │
-  │  cmd_start       │   SDA    │  rx_data ──► FND │
-  │  cmd_write  ◄───►│◄────────►│  tx_data         │
-  │  cmd_read        │          │  SLAVE_ADDR=0x12 │
-  │  cmd_stop        │          │                  │
-  │  ◄── done/busy   │          │                  │
-  └──────────────────┘          └──────────────────┘
-```
+<img width="669" height="461" alt="Image" src="https://github.com/user-attachments/assets/bba1bf44-0224-4728-8662-f00f81aede62" />
+
+</td>
+
+</tr>
+</table>
 
 <table>
 <tr>
