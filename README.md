@@ -190,6 +190,9 @@ IDLE ──(sda_fall & scl=1)──► ADDR ──(주소 일치)──► DATA_
 
 </td>
 
+<td width="6%">
+</td>
+
 <td width="50%">
 
 **I2C UVM 검증**
