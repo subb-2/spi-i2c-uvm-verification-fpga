@@ -11,7 +11,7 @@
 ## 📝 프로젝트 개요
 
 SPI / I2C 통신 프로토콜을 직접 분석하고, SystemVerilog로 Master / Slave RTL을 설계한 뒤 UVM 환경을 구축하여 기능 검증까지 수행한 프로젝트입니다.  
-단순 통신 동작 구현을 넘어, **CPOL / CPHA 4가지 모드 분석**, **I2C Slave FSM에서 Write / Read 방향 분기 처리**, **UVM Monitor의 레벨 감지 오류 수정** 등 프로토콜 스펙을 직접 해석하고 엣지 케이스를 검증하는 데 집중하였습니다.  
+단순 통신 동작 구현을 넘어, **SPI Master CPOL / CPHA 4가지 모드 구현**, **I2C Slave FSM에서 Write / Read 방향 분기 처리**, **UVM Verification** 등 프로토콜 스펙을 직접 해석하고 검증하는 데 집중하였습니다.  
 최종적으로 두 개의 Basys3 보드를 연결하여 SPI / I2C 실제 통신 동작을 확인하였습니다.
 
 ---
