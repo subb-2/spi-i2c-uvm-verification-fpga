@@ -94,6 +94,7 @@ IDLE ──(sda_fall & scl=1)──► ADDR ──(주소 일치)──► DATA_
 
 ### UVM 환경 구성 (SPI)
 
+<img width="531" height="501" alt="Image" src="https://github.com/user-attachments/assets/e14628f0-2d75-4a7a-bd4d-8a2ad5185688" />
 ```
   ┌─────────────────────────────────────────────────────────────────┐
   │  test                                                           │
