@@ -52,14 +52,14 @@ IDLE ──(sda_fall & scl=1)──► ADDR ──(주소 일치)──► DATA_
 
 * **Architecture**: test → env(agent + scoreboard + coverage) 계층 구조. Monitor가 `cs_n` 하강을 감지하고 SCLK Low→High 전환마다 MOSI / MISO를 샘플링하여 Scoreboard에 전달.
 * **Scoreboard**: MOSI 채널은 `m_tx_data` vs 수집된 MOSI 값, MISO 채널은 `s_tx_data` vs 수집된 MISO 값을 비교.
-* **Coverage**: `cp_tx_data` (0x00~0xFF 전 범위), `cp_clk_div` (10MHz / 1MHz), `cp_mosi` / `cp_miso` (0x00~0xFF 전 범위).
+* **Coverage**: `cp_tx_data` (0x00-0xFF 전 범위), `cp_clk_div` (10MHz / 1MHz), `cp_mosi` / `cp_miso` (0x00-0xFF 전 범위).
 
 ### 4. I2C UVM 검증 환경
 
 * **Architecture**: test → env(agent + scoreboard + coverage) 계층 구조. Scoreboard는 `drv_imp` / `mon_imp` 이중 포트 구조로, Driver에서 `exp_queue`에 push하고 Monitor에서 pop하여 비교.
 * **Monitor 타이밍**: `@(mon_cb)` 기준으로 `cmd_write` / `cmd_read` 감지 시 `m_tx` / `s_tx` 캡처. `m_done==1` 시점에 `m_rx` / `s_rx` 샘플링. 주소(`0x24` / `0x25`) 제외한 데이터만 `ap.write`.
 * **Scoreboard**: Write 방향은 `exp_item.m_tx_data` vs `item.s_rx_data`, Read 방향은 `exp_item.m_tx_data` vs `item.m_rx_data` 비교.
-* **Coverage**: `cp_m_tx_data` / `cp_s_tx_data` (0x00~0xFF), `cp_rw` (Write/Read), `cx_m_tx_rw` / `cx_s_rx_rw` / `cx_m_rx_rw` / `cx_s_tx_rw` (교차 커버리지).
+* **Coverage**: `cp_m_tx_data` / `cp_s_tx_data` (0x00-0xFF), `cp_rw` (Write/Read), `cx_m_tx_rw` / `cx_s_rx_rw` / `cx_m_rx_rw` / `cx_s_tx_rw` (교차 커버리지).
 
 ---
 
