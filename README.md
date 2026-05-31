@@ -29,24 +29,22 @@ SPI / I2C 통신 프로토콜을 직접 분석하고, SystemVerilog로 Master / 
 ### 2. I2C Master / Slave RTL 설계
 
 * **Protocol**: 2-wire Half-Duplex 주소 기반 통신. SCL / SDA (Open-Drain). 7bit Slave 주소 + R/W bit로 대상 지정, Byte마다 ACK/NACK 수신 확인.
-* **Master FSM**: `IDLE → START → WAIT_CMD` 구조. `WAIT_CMD`에서 `cmd_write` / `cmd_read` / `cmd_stop` / `cmd_start`를 감지하여 분기. `DATA` 상태에서 `qtr_tick==1`마다 SCL / SDA 토글, `is_read` 플래그로 송수신 분기.
+* **Master FSM**: `IDLE → START → WAIT_CMD → DATA → DATA_ACK → STOP` `WAIT_CMD`에서 커맨드를 감지하여 분기. `DATA` 상태에서 `qtr_tick==1`마다 SCL / SDA 토글, `is_read` 플래그로 송수신 분기. 8비트 전송 완료 후 `DATA_ACK`를 거쳐 `WAIT_CMD`로 복귀.
 
-```
-IDLE → START → WAIT_CMD
-                  ├── cmd_write ──► DATA ──► DATA_ACK ──► WAIT_CMD
-                  ├── cmd_read  ──► DATA ──► DATA_ACK ──► WAIT_CMD
-                  ├── cmd_stop  ──► STOP ──► IDLE
-                  └── cmd_start ──► START
-```
+| Command | 경로 |
+|---|---|
+| `cmd_write` | `WAIT_CMD → DATA(is_read=0) → DATA_ACK → WAIT_CMD` |
+| `cmd_read` | `WAIT_CMD → DATA(is_read=1) → DATA_ACK → WAIT_CMD` |
+| `cmd_stop` | `WAIT_CMD → STOP → IDLE` |
+| `cmd_start` | `WAIT_CMD → START` |
 
-* **Slave FSM**: `IDLE → ADDR → DATA_ACK → WRITE_DATA / READ_DATA`. `from_addr` 플래그를 통해 주소 수신 직후 Write/Read 방향을 분기하여 ACK 전송 및 데이터 출력 타이밍을 결정.
+* **Slave FSM**: `IDLE → ADDR → DATA_ACK → WRITE_DATA / READ_DATA`. `from_addr` 플래그로 주소 수신 직후의 첫 `DATA_ACK`를 구분. Write/Read 방향을 분기하여 ACK 전송 및 데이터 출력 타이밍을 결정.
 
-```
-IDLE ──(sda_fall & scl=1)──► ADDR ──(주소 일치)──► DATA_ACK
-                                                      ├── from_addr == 1 ──► WRITE_DATA
-                                                      ├── bef_read      ──► READ_DATA
-                                                      └── bef_write     ──► WRITE_DATA
-```
+| 조건 | 경로 |
+|---|---|
+| `from_addr == 1` | `DATA_ACK → (sda_r = tx_data[7]) → WRITE_DATA` |
+| `bef_read` | `DATA_ACK → READ_DATA` |
+| `bef_write` | `DATA_ACK → WRITE_DATA` |
 
 ### 3. SPI UVM 검증 환경
 
