@@ -95,7 +95,7 @@ IDLE ──(sda_fall & scl=1)──► ADDR ──(주소 일치)──► DATA_
 <table>
 <tr>
 
-<td width="47%">
+<td width="48%">
 
 ### UVM 환경 구성 (SPI)
 
@@ -104,10 +104,10 @@ IDLE ──(sda_fall & scl=1)──► ADDR ──(주소 일치)──► DATA_
 
 </td>
 
-<td width="6%">
+<td width="4%">
 </td>
 
-<td width="47%">
+<td width="48%">
 
 ### UVM 환경 구성 (I2C)
 
