@@ -171,6 +171,10 @@ IDLE ──(sda_fall & scl=1)──► ADDR ──(주소 일치)──► DATA_
 
 ## ✅ 검증 결과
 
+<table>
+<tr>
+<td width="50%">
+
 **SPI UVM 검증**
 
 | 항목 | 결과 |
@@ -183,6 +187,10 @@ IDLE ──(sda_fall & scl=1)──► ADDR ──(주소 일치)──► DATA_
 | `cp_tx_data` | 100.0% (0x00~0xFF) |
 | Scoreboard PASS | **2,560** |
 | Scoreboard FAIL | **0** |
+
+</td>
+
+<td width="50%">
 
 **I2C UVM 검증**
 
@@ -197,6 +205,10 @@ IDLE ──(sda_fall & scl=1)──► ADDR ──(주소 일치)──► DATA_
 | `cx_m_rx_rw` / `cx_s_tx_rw` | 100.0% (교차 커버리지) |
 | Scoreboard PASS | **2,560** |
 | Scoreboard FAIL | **0** |
+
+</td>
+</tr>
+</table>
 
 > 8bit 데이터 기준 256가지 경우를 충분히 커버하기 위해 2,560회 트랜잭션 진행
 
