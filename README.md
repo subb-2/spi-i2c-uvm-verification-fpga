@@ -155,51 +155,17 @@ IDLE ──(sda_fall & scl=1)──► ADDR ──(주소 일치)──► DATA_
 * **원인**: SystemVerilog의 `wait`은 현재 값이 조건을 만족하면 즉시 통과하는 레벨 감지 방식. HIGH 구간 중에 루프가 다시 돌아오면 `wait(sclk==1)`이 그냥 통과되어 오류 누적.
 * **해결**: LOW를 먼저 확인하는 패턴으로 변경하여 반드시 상승엣지를 기다리도록 수정.
 
-```systemverilog
-// 수정 전 — 레벨 감지로 인한 즉시 통과 위험
-for (int i = 0; i < 8; i++) begin
-    wait(spi_if.mon_cb.sclk == 1'b1);
-    @(spi_if.mon_cb);
-    shift_mosi = {shift_mosi[6:0], spi_if.mon_cb.mosi};
-end
-
-// 수정 후 — LOW 확인 후 상승엣지 대기
-for (int i = 0; i < 8; i++) begin
-    if (spi_if.mon_cb.sclk == 1'b1) begin
-        wait(spi_if.mon_cb.sclk == 1'b0);  // LOW 확인
-    end
-    wait(spi_if.mon_cb.sclk == 1'b1);      // 상승엣지 대기
-    @(spi_if.mon_cb);
-    shift_mosi = {shift_mosi[6:0], spi_if.mon_cb.mosi};
-end
-```
-
 ### 2. SPI FND — BTN 주소 지정 시 데이터 덮어쓰기
 
 * **문제**: BTN count로 FND 자릿수별 주소를 지정하려 했으나, 매 클럭마다 새 값이 계속 쓰여 원하는 자리에만 저장이 안 됨.
 * **원인**: 수신 완료 여부와 관계없이 항상 `mem[addr] <= idata`가 실행됨.
 * **해결**: `rx_done` 신호를 쓰기 인에이블로 추가하여, SPI 수신 완료 시점에만 메모리에 저장.
 
-```systemverilog
-// 수정 후 — rx_done==1일 때만 저장
-always @(posedge clk) begin
-    if (rx_done)
-        mem[addr] <= idata;
-end
-```
-
 ### 3. I2C Slave — Read 명령 수신 시 ACK 미전송 문제
 
 * **문제**: ADDR 데이터를 받고 R/W 비트가 Read(`1`)이면, Slave가 ACK를 전송하지 않고 대기 상태에 빠짐.
 * **원인**: `DATA_ACK` 상태에서 Write / Read 방향 구분 없이 동일하게 ACK를 처리했으나, Read일 때 Slave가 즉시 데이터를 출력해야 하는 타이밍 분기가 누락됨.
 * **해결**: `from_addr` 플래그를 추가하여 주소 수신 직후인지 데이터 수신 이후인지를 구분. `from_addr==1`이면 Slave가 첫 번째 데이터 바이트를 MSB부터 출력하도록 분기 처리.
-
-```
-DATA_ACK 상태
-    ├── from_addr == 1 → sda_r = tx_data[7] → WRITE_DATA
-    ├── bef_read       → READ_DATA
-    └── bef_write      → WRITE_DATA
-```
 
 ---
 
