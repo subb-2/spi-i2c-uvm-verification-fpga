@@ -59,6 +59,17 @@ SPI / I2C 통신 프로토콜을 직접 분석하고, SystemVerilog로 Master / 
 * **Scoreboard**: Write 방향은 `exp_item.m_tx_data` vs `item.s_rx_data`, Read 방향은 `exp_item.m_tx_data` vs `item.m_rx_data` 비교.
 * **Coverage**: `cp_m_tx_data` / `cp_s_tx_data` (0x00-0xFF), `cp_rw` (Write/Read), `cx_m_tx_rw` / `cx_s_rx_rw` / `cx_m_rx_rw` / `cx_s_tx_rw` (교차 커버리지).
 
+### 5. FPGA 동작 시나리오
+
+**SPI (Btn + SW + SPI + FND)**
+- Master 보드의 `sw[3:0]`으로 전송할 값을 설정하고 `BTN_down`을 누르면 SPI 전송이 시작.
+- Slave 보드는 수신한 값(`rx_data`)을 `btn counter`가 가리키는 자릿수(`mem[addr]`)에 저장하고 FND에 표시.
+- Slave 보드의 `BTN_up`을 누를 때마다 표시 자릿수가 왼쪽으로 이동하며, 다음 값이 수신될 때까지 이전 값이 유지.
+
+**I2C (SW + I2C + FND)**
+- Master 보드의 `sw[7:0]`으로 전송할 값(0~255)을 설정하고 `sw[15]`를 올리면 I2C 전송이 시작.
+- Slave 보드는 수신한 `rx_data`를 FND에 직접 표시. 슬레이브 주소는 고정.
+
 ---
 
 ## 🏗️ 시스템 구조
