@@ -23,8 +23,8 @@ SPI / I2C 통신 프로토콜을 직접 분석하고, SystemVerilog로 Master / 
 * **Protocol**: 4-wire 동기식 Full-Duplex 통신. SCLK / MOSI / MISO / CS_n 4개 신호선. Master가 SCLK을 생성하고 Shift Register를 통해 동시에 송수신.
 * **CPOL / CPHA**: 4가지 동작 모드(Mode 0~3) 지원. 실제 Slave 구현에서 가장 많이 사용되는 Mode 0(CPOL=0, CPHA=0)을 기준으로 검증.
 
-* **Master FSM**: `IDLE → START → DATA → STOP`. `half_tick==1`마다 SCLK 토글, CPOL/CPHA에 따라 MOSI 출력 / MISO 샘플링. SCLK 10MHz 기준 `clk_div = 4` 설정.
-* **Slave FSM**: `IDLE → START → DATA → STOP`. `cs_n==0` 감지 시 START 진입, `edge_rise` 시 MISO 출력, `edge_falling` 시 MOSI 수신.
+* **Master FSM**: `IDLE → START → DATA → STOP`. `half_tick==1`마다 SCLK 토글, CPOL/CPHA에 따라 MOSI 송신 / MISO 샘플링. SCLK 10MHz 기준 `clk_div = 4` 설정.
+* **Slave FSM**: `IDLE → START → DATA → STOP`. `cs_n==0` 감지 시 START 진입, `edge_rise` 시 MOSI 수신, `edge_falling` 시 MISO 송신.
 
 ### 2. I2C Master / Slave RTL 설계
 
