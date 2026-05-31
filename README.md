@@ -131,7 +131,7 @@ SPI / I2C 통신 프로토콜을 직접 분석하고, SystemVerilog로 Master / 
 
 <table>
 <tr>
-<td width="50%">
+<td width="49%">
 
 **SPI UVM 검증**
 
@@ -148,10 +148,10 @@ SPI / I2C 통신 프로토콜을 직접 분석하고, SystemVerilog로 Master / 
 
 </td>
 
-<td width="30%">
+<td width="2%">
 </td>
 
-<td width="50%">
+<td width="49%">
 
 **I2C UVM 검증**
 
